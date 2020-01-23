@@ -52,6 +52,8 @@ class SSID(models.Model):
     sites = models.ManyToManyField(Site)
     encryption = models.CharField(max_length=2, choices=EncryptionMethods.choices)
     psk = models.CharField(max_length=64)
+    active_24 = models.BooleanField(default=True)
+    active_5 = models.BooleanField(default=True)
 
 
 class SSHKey(models.Model):
