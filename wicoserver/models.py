@@ -41,6 +41,18 @@ class Radio(models.Model):
     max_channel = models.IntegerField()
 
 
+class IPAddress(models.Model):
+    ap = models.ForeignKey(to=AccessPoint, on_delete=models.CASCADE)
+    vlan = models.IntegerField(null=True)
+    vxlan = models.IntegerField(null=True)
+    dhcp = models.BooleanField(default=True)
+    address = models.CharField(max_length=39)
+    subnet = models.IntegerField()
+    gateway = models.CharField(max_length=39)
+    version = models.IntegerField()
+    dns = models.CharField(max_length=39)
+
+
 class SSID(models.Model):
     class EncryptionMethods(models.TextChoices):
         WPA2_PSK = 'P2', gettext_lazy('psk2')
