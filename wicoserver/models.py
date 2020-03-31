@@ -59,3 +59,10 @@ class SSID(models.Model):
 class SSHKey(models.Model):
     name = models.CharField(max_length=128)
     key = models.CharField(max_length=1024)
+
+class SubscriptionRequest(models.Model):
+    mac_address = models.CharField(max_length=12)
+    model = models.CharField(max_length=AccessPoint._meta.get_field("model").max_length)
+
+    class Meta:
+        managed = False
