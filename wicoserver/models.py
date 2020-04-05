@@ -22,6 +22,13 @@ class AccessPoint(models.Model):
     location = models.ForeignKey(to=Location, on_delete=models.SET_NULL, null=True)
     site = models.ForeignKey(to=Site, on_delete=models.SET_NULL, null=True)
     uplink_port = models.CharField(max_length=16)
+    token = models.CharField(max_length=64)
+    subscribed = models.BooleanField()
+    mac_address = models.CharField(max_length=12, unique=True)
+
+    @staticmethod
+    def create_from_subscription_request(model, mac_address, token):
+        return AccessPoint.objects.create(model=model, mac_address=mac_address, token=token, subscribed=False)
 
 
 class Radio(models.Model):
@@ -63,6 +70,7 @@ class SSHKey(models.Model):
 class SubscriptionRequest(models.Model):
     mac_address = models.CharField(max_length=12)
     model = models.CharField(max_length=AccessPoint._meta.get_field("model").max_length)
+    token = models.CharField(max_length=AccessPoint._meta.get_field("token").max_length)
 
     class Meta:
         managed = False
