@@ -18,3 +18,13 @@ def subscribe_access_point(request):
 
     models.AccessPoint.create_from_subscription_request(model=model, mac_address=mac_address, token=token)
     return Response(status=201)
+
+
+@api_view()
+def get_access_point_subscription_state(request, token):
+    existing_ap = models.AccessPoint.objects.filter(token=token).first()
+
+    if existing_ap is None:
+        return Response(status=404)
+
+    return Response({"subscribed": existing_ap.subscribed})

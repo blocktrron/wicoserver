@@ -20,5 +20,6 @@ from wicoserver.views import ap
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('ap/subscribe', ap.subscribe_access_point)
+    path('ap/subscribe', ap.subscribe_access_point),
+    path('ap/<str:token>/subscription/status', ap.get_access_point_subscription_state)
 ]

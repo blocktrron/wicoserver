@@ -51,3 +51,31 @@ class APSubscriptionTestCase(TestCase):
 
         response2 = self.client.post("/ap/subscribe", self.VALID_TEST_DATA)
         self.assertEqual(409, response2.status_code)
+
+
+class APSubscriptionStatusTestCase(TestCase):
+    TOKEN = "d0d70149369b5bef6819c3e58ce5ac3db0978a930786370d06fbf2d3333d398d"
+
+    def setUp(self):
+        self.ap = models.AccessPoint.objects.create(name="SampleAP",
+                                                    model="OCEDO Koala",
+                                                    token=self.TOKEN,
+                                                    subscribed=False,
+                                                    mac_address="AA:BB:CC:DD:EE:FF")
+
+    def test_get_ap_subscription_status_on_unsubscribed(self):
+        response = self.client.get("/ap/{token}/subscription/status".format(token=self.TOKEN))
+        self.assertEqual(200, response.status_code)
+        self.assertEqual(False, response.data["subscribed"])
+
+    def test_get_ap_subscription_status_on_subscribed(self):
+        self.ap.subscribed = True
+        self.ap.save()
+        response = self.client.get("/ap/{token}/subscription/status".format(token=self.TOKEN))
+        self.assertEqual(200, response.status_code)
+        self.assertEqual(True, response.data["subscribed"])
+
+    def test_get_ap_subscription_status_on_never_subscribed(self):
+        self.ap.delete()
+        response = self.client.get("/ap/{token}/subscription/status".format(token=self.TOKEN))
+        self.assertEqual(404, response.status_code)
