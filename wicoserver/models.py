@@ -22,7 +22,7 @@ class AccessPoint(models.Model):
     location = models.ForeignKey(to=Location, on_delete=models.SET_NULL, null=True)
     site = models.ForeignKey(to=Site, on_delete=models.SET_NULL, null=True)
     uplink_port = models.CharField(max_length=16)
-    token = models.CharField(max_length=64)
+    token = models.CharField(max_length=64, unique=True)
     subscribed = models.BooleanField()
     mac_address = models.CharField(max_length=12, unique=True)
 
